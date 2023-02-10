@@ -1,35 +1,67 @@
 import { JSDOM } from "jsdom"
 
+interface IPages {
+    [normalizedURL: string]: number
+}
 
-async function crawl(currentURL: string) {
-    console.log("Crawling:", currentURL)
+async function crawl(baseURL: string, currentURL: string, pages: IPages) {
+    // ignore URLs that are external to the site
+    const baseURLObj = new URL(baseURL)
+    const currentURLObj = new URL(currentURL)
+
+    // base cases
+    // ignore external site
+    if (baseURLObj.hostname !== currentURLObj.hostname) {
+        return pages
+    }
+
+    // check if URL has been seen, if not, add URL to pages
+    const normalizedURL = normalizeURL(currentURL)
+
+    if (normalizedURL in pages) {
+        pages[normalizedURL] += 1
+        return pages
+    }
+    else {
+        pages[normalizedURL] = 1
+        console.log("Crawling:", currentURL)
+    }
+
     try {
         const res = await fetch(currentURL)
         if (res.status > 399) {
             // client error or server error
             console.log(`Error with fetch on page ${currentURL}`, res.status)
-            return
+            return pages
         }
         const contentType = res.headers.get("content-type")
 
         if (contentType === null) {
             console.log(`Could not get content type of ${currentURL}, exiting`)
-            return
+            return pages
         }
 
         if (!contentType.includes("text/html")) {
-            console.log(`${currentURL} is of type ${contentType}. Please provide text/html for parsing.`)
-            return
+            console.log(`${currentURL} is of type ${contentType}. Skipping...`)
+            return pages
         }
-        console.log(await res.text())
+
+        const htmlBody = await res.text()
+
+        const nextURLs = getURLsFromHTML(htmlBody, baseURL)
+        for (const nextURL of nextURLs) {
+            pages = await crawl(baseURL, nextURL, pages)
+        }
+        return pages
     }
     catch (err: unknown) {
         if (err instanceof TypeError) {
             console.log(`Could not crawl ${currentURL}, it might be invalid`)
+            return pages
         }
         else {
             console.log(`Could not crawl ${currentURL}, but not a TypeError`)
-            console.log(err)
+            return pages
         }
     }
 
@@ -46,6 +78,7 @@ function getURLsFromHTML(htmlBody: string, baseURL: string) {
             try {
                 const url = new URL(`${baseURL}${link.href}`)
                 urls.push(url.href)
+                console.log(url.href)
             }
             catch (err: unknown) {
                 if (err instanceof TypeError) {
@@ -63,10 +96,8 @@ function getURLsFromHTML(htmlBody: string, baseURL: string) {
                 urls.push(url.href)
             }
             catch (err: unknown) {
-                console.log(err instanceof Error)
-                console.log(err instanceof TypeError)
                 if (err instanceof TypeError) {
-                    console.log("Err with absolute url:", err.message)
+                    continue
                 }
                 else {
                     console.log(err)

@@ -35,8 +35,15 @@ test("normalizeURL strip http protocol", () => {
     expect(actual).toEqual(expected)
 })
 
-test("normalizeURL handle malformed URL", () => {
+test("normalizeURL malformed URL", () => {
     const input = "/ca/path"
+    expect(() => {
+        normalizeURL(input);
+    }).toThrow("Invalid URL")
+})
+
+test("normalizeURL invalid URL", () => {
+    const input = "invalid"
     expect(() => {
         normalizeURL(input);
     }).toThrow("Invalid URL")
@@ -61,6 +68,7 @@ test("getURLsFromHTML absoluteURLs", () => {
     expect(actual).toEqual(expected)
 
 })
+
 test("getURLsFromHTML relativeURLs", () => {
     const htmlBody: string = `
 <html>
@@ -75,20 +83,41 @@ test("getURLsFromHTML relativeURLs", () => {
     const actual = getURLsFromHTML(htmlBody, inputBaseURL)
     const expected = ["https://blog.msoup.com/path/"]
     expect(actual).toEqual(expected)
+})
 
+test("getURLsFromHTML fetch multipleURLs", () => {
+    const htmlBody: string = `
+<html>
+    <body>
+    <a href="https://blog.msoup.com/path1/">
+        MSoup's Blog 1
+    </a>
+    <a href="#">
+        MSoup's Blog 2
+    </a>
+    </body>
+</html>
+`
+    const inputBaseURL = "https://blog.msoup.com"
+    const actual = getURLsFromHTML(htmlBody, inputBaseURL)
+    const expected = ["https://blog.msoup.com/path1/", "about:blank#",]
+    expect(actual).toEqual(expected)
+})
+
+test("getURLsFromHTML skip invalid URL", () => {
+    const htmlBody: string = `
+<html>
+    <body>
+    <a href="invalid">
+        No slash or protocol - broken link
+    </a>
+    </body>
+</html>
+`
+    const inputBaseURL = "https://blog.msoup.com"
+    const actual = getURLsFromHTML(htmlBody, inputBaseURL)
+    const expected: [] = []
+    expect(actual).toEqual(expected)
 })
 
 
-
-// test("normalizeURL handle malformed URL", () => {
-//     const input = "/ca/path"
-//     expect(() => {
-//         normalizeURL(input);
-//     }).toThrow("Invalid URL")
-// })
-// test("normalizeURL handle malformed URL", () => {
-//     const input = "/ca/path"
-//     expect(() => {
-//         normalizeURL(input);
-//     }).toThrow("Invalid URL")
-// })

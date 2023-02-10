@@ -1,0 +1,5 @@
+---------
+usage 
+
+main: npm run crawl [website]
+tests: npm run test

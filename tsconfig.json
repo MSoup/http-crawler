@@ -1,6 +1,9 @@
 {
+    "ts-node": {
+        "files": true
+    },
     "compilerOptions": {
-        "target": "ES2015",
+        "target": "ES6",
         "outDir": "dist",
         "module": "commonjs",
         "moduleResolution": "node",

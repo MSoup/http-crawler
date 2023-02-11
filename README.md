@@ -26,6 +26,14 @@
 ]
 ```
 
+# Technologies
+- NodeJS
+- TS-node
+- TypeScript (type checking)
+- Express (API-functionality)
+- Babel (transpilation)
+- Jest (unit tests)
+
 # Implementation
 
 The core functionality of the app is built around 3 main functions:
@@ -93,3 +101,9 @@ Upon digging, I discovered that the root issue was from [Jest having completely 
 The take-away is that as of 2023, using `someArray instanceof Array` and when using http, `someError instanceof Error` will inevitably return `false`, even if everything else seems to suggest that it is `true`. This hasn't been patched because Jest ensures that every test runs in its own sandbox.
 
 In the case of `arrays`, we can simply move to using `Array.isArray` as a band-aid fix, but `Error.isError` is not a function. 
+
+As a temporary fix, I have made the paths the same whether `err instanceof TypeError` is true or not.
+
+# TODO
+
+I hope to extend this project so it becomes a callable API, not a stand alone module to be run locally.

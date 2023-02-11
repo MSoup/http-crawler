@@ -15,6 +15,13 @@ async function main() {
 
     console.log("starting crawler on", baseURL)
 
+    try {
+        new URL(baseURL)
+    }
+    catch (err: unknown) {
+        console.log("Invalid URL, exiting")
+        process.exit(1)
+    }
     const pages = await crawl(baseURL, baseURL, {})
 
     const output: OutputIPages[] = []

@@ -1,8 +1,5 @@
 import { JSDOM } from "jsdom"
-
-interface IPages {
-    [normalizedURL: string]: number
-}
+import type { IPages } from "./types"
 
 async function crawl(baseURL: string, currentURL: string, pages: IPages) {
     // ignore URLs that are external to the site
@@ -19,7 +16,7 @@ async function crawl(baseURL: string, currentURL: string, pages: IPages) {
     const normalizedURL = normalizeURL(currentURL)
 
     if (normalizedURL in pages) {
-        pages[normalizedURL] += 1
+        pages[normalizedURL] += 1 // {"google.ca": 1}
         return pages
     }
     else {
@@ -64,7 +61,6 @@ async function crawl(baseURL: string, currentURL: string, pages: IPages) {
             return pages
         }
     }
-
 }
 
 function getURLsFromHTML(htmlBody: string, baseURL: string) {
@@ -78,14 +74,13 @@ function getURLsFromHTML(htmlBody: string, baseURL: string) {
             try {
                 const url = new URL(`${baseURL}${link.href}`)
                 urls.push(url.href)
-                console.log(url.href)
             }
             catch (err: unknown) {
                 if (err instanceof TypeError) {
                     console.log("Err with relative url:", err.message)
                 }
                 else {
-                    console.log(err)
+                    continue
                 }
             }
         }
@@ -100,7 +95,7 @@ function getURLsFromHTML(htmlBody: string, baseURL: string) {
                     continue
                 }
                 else {
-                    console.log(err)
+                    continue
                 }
             }
         }

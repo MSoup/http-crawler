@@ -1,6 +1,3 @@
-// const { normalizeURL } = require("../../crawl.ts")
-// const { test, expect } = require("@jest/globals")
-
 import { normalizeURL, getURLsFromHTML } from "../../crawl"
 import { test, expect } from "@jest/globals"
 

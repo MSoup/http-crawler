@@ -1,6 +1,13 @@
 # Recursive Site Crawler
 
-Given a base URL, recursive-site-crawler collects all `anchor` elements on pages of content `text/html` given a base URL. It produces a JSON of all visited URLs and the number of references to each URL in a format like the below:
+# Preview
+
+![preview-usage](./usage/sample.gif)
+
+# Features
+
+- given a base URL, collects all `anchor` elements on pages of content `text/html` 
+- produces JSON of visited URLs and the number of references to each URL in a format like the below:
 
 ```json
 [

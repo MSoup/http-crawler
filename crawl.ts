@@ -2,6 +2,12 @@ import { JSDOM } from "jsdom"
 import type { IPages } from "./types"
 
 async function crawl(baseURL: string, currentURL: string, pages: IPages) {
+    // stop crawling upon hitting limit
+    // not ideal: I don't want to be constantly changing the pages objects to an array
+    // I'll keep it as-is for now
+    if (Object.keys(pages).length > 15) {
+        return pages
+    }
     // ignore URLs that are external to the site
     const baseURLObj = new URL(baseURL)
     const currentURLObj = new URL(currentURL)

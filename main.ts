@@ -11,7 +11,8 @@ async function main() {
         process.exit(1)
     }
 
-    const baseURL = process.argv[2]
+    let baseURL = process.argv[2]
+
     console.log("starting crawler on", baseURL)
 
     const pages = await crawl(baseURL, baseURL, {})
@@ -19,13 +20,13 @@ async function main() {
     const output: OutputIPages[] = []
 
     for (const page of Object.entries(pages)) {
-        console.log(page)
         const url = page[0]
         const visits = page[1]
 
         output.push({ url: url, visits: visits })
     }
 
+    console.log(output)
     return JSON.stringify(output)
 }
 

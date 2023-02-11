@@ -8,10 +8,18 @@ test("normalizeURL strip protocol", () => {
 
     expect(actual).toEqual(expected)
 })
+
 test("normalizeURL strip trailing slashes", () => {
     const input = "https://google.ca/path/"
     const actual = normalizeURL(input)
     const expected = "google.ca/path"
+
+    expect(actual).toEqual(expected)
+})
+test("normalizeURL strip trailing even in base path", () => {
+    const input = "https://google.ca/"
+    const actual = normalizeURL(input)
+    const expected = "google.ca"
 
     expect(actual).toEqual(expected)
 })

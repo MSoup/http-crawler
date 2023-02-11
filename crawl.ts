@@ -1,34 +1,38 @@
 import { JSDOM } from "jsdom"
 import type { IPages } from "./types"
 
-async function crawl(baseURL: string, currentURL: string, pages: IPages) {
-    // stop crawling upon hitting limit
+async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: number = 15) {
     // not ideal: I don't want to be constantly changing the pages objects to an array
     // I'll keep it as-is for now
-    if (Object.keys(pages).length > 15) {
+    if (limit && Object.keys(pages).length > limit) {
         return pages
     }
+
+    // strip trailing slashes from baseURL, we need to do this else google.ca and google.ca/ 
+    // become two different base urls
+    if (baseURL.slice(-1) === "/") {
+        baseURL = baseURL.slice(0, -1)
+    }
+
     // ignore URLs that are external to the site
     const baseURLObj = new URL(baseURL)
     const currentURLObj = new URL(currentURL)
 
-    // base cases
-    // ignore external site
+    // ignore external sites
     if (baseURLObj.hostname !== currentURLObj.hostname) {
         return pages
     }
 
-    // check if URL has been seen, if not, add URL to pages
+    // increment pages[url] if it already exists, else recursively crawl
     const normalizedURL = normalizeURL(currentURL)
 
     if (normalizedURL in pages) {
         pages[normalizedURL] += 1 // {"google.ca": 1}
         return pages
     }
-    else {
-        pages[normalizedURL] = 1
-        console.log("Crawling:", currentURL)
-    }
+    // first time seeing url 
+    pages[normalizedURL] = 1
+    console.log("Crawling:", currentURL)
 
     try {
         const res = await fetch(currentURL)

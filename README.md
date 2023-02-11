@@ -8,6 +8,9 @@
 
 - given a base URL, collects all `anchor` elements on pages of content `text/html` 
 - produces JSON of visited URLs and the number of references to each URL in a format like the below:
+- works with HTTP and HTTPS
+- handles malformed URLs
+- unit tests available at src/tests (jest)
 
 ```json
 [

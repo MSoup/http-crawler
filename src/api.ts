@@ -1,9 +1,25 @@
+import { ParsedUrlQuery } from "querystring";
 import { crawl } from "./crawl";
 import { IPages, OutputIPages } from "./types"
 
-// given a domain, returns a JSON of all internal URLs of domain
-async function getSitemap(baseURL: string) {
-    const pages = await crawl(baseURL, baseURL, {})
+// given a domain, returns object of all internal URLs of domain
+async function getSitemap(baseURL: string, limit?: number) {
+    let url;
+    if (!((baseURL.includes("http://")) || (baseURL.includes("https://")))) {
+        console.log("Protocol not detected, appending http://")
+        baseURL = `http://${baseURL}`
+    }
+
+    try {
+        url = new URL(baseURL)
+    }
+    catch (err) {
+        return []
+    }
+
+
+
+    const pages = await crawl(baseURL, baseURL, {}, limit)
 
     const output: OutputIPages[] = []
 
@@ -14,8 +30,7 @@ async function getSitemap(baseURL: string) {
         output.push({ url: url, visits: visits })
     }
 
-    console.log(output)
-    return JSON.stringify(output)
+    return output
 }
 
 export { getSitemap }

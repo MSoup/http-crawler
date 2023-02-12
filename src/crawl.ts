@@ -1,9 +1,12 @@
 import { JSDOM } from "jsdom"
 import type { IPages } from "./types"
 
-async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: number = 15) {
+async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: number = 5) {
     // not ideal: I don't want to be constantly changing the pages objects to an array
     if (limit && Object.keys(pages).length > limit) {
+        return pages
+    }
+    if (limit < 1) {
         return pages
     }
 

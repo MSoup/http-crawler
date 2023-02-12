@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.ts",
+  "jest": {
+    "testPathIgnorePatterns": [
+      "dist"
+    ]
+  },
   "scripts": {
     "start": "cross-env NODE_OPTIONS=--no-warnings ts-node app.ts",
     "crawl": "cross-env NODE_OPTIONS=--no-warnings ts-node main.ts",

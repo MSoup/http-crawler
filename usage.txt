@@ -1,5 +1,17 @@
 ---------
 usage 
 
-main: npm run crawl [website]
-tests: npm run test
+Run as standalone
+$ npm run crawl [website]
+
+Serve as api server: 
+$ npm run start
+
+Tests: 
+$ npm run test
+
+Build dist:
+$ npm run build
+
+Work on it locally:
+$ npm run dev

@@ -3,13 +3,12 @@ import type { IPages } from "./types"
 
 async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: number = 15) {
     // not ideal: I don't want to be constantly changing the pages objects to an array
-    // I'll keep it as-is for now
     if (limit && Object.keys(pages).length > limit) {
         return pages
     }
 
-    // strip trailing slashes from baseURL, we need to do this else google.ca and google.ca/ 
-    // become two different base urls
+    // strip trailing slashes from baseURL to prevent google.ca and google.ca/ 
+    // from becoming two different base urls
     if (baseURL.slice(-1) === "/") {
         baseURL = baseURL.slice(0, -1)
     }
@@ -26,8 +25,9 @@ async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: 
     // increment pages[url] if it already exists, else recursively crawl
     const normalizedURL = normalizeURL(currentURL)
 
+    // pages object looks like {"http://google.ca": 1}
     if (normalizedURL in pages) {
-        pages[normalizedURL] += 1 // {"google.ca": 1}
+        pages[normalizedURL] += 1
         return pages
     }
     // first time seeing url 
@@ -43,6 +43,7 @@ async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: 
         }
         const contentType = res.headers.get("content-type")
 
+        // very rare
         if (contentType === null) {
             console.log(`Could not get content type of ${currentURL}, exiting`)
             return pages

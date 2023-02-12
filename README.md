@@ -37,6 +37,29 @@
 - Babel (transpilation)
 - Jest (unit tests)
 
+# Usage
+usage 
+
+### Standalone (results to console)
+```
+$ npm run crawl [website]
+```
+### Api server: 
+```
+$ npm run start
+```
+### Tests: 
+```
+$ npm run test
+```
+### Build dist:
+```
+$ npm run build
+```
+### Develop Locally:
+```
+$ npm run dev
+```
 # Implementation
 
 The core functionality of the app is built around 3 main functions:

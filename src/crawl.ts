@@ -68,6 +68,7 @@ async function crawl(baseURL: string, currentURL: string, pages: IPages, limit: 
     catch (err: unknown) {
         if (err instanceof TypeError) {
             console.log(`Could not crawl ${currentURL}, it might be invalid`)
+            delete pages[normalizedURL]
             return pages
         }
         else {

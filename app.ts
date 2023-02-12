@@ -5,19 +5,33 @@ const app: Express = express()
 const port = 3000
 
 app.get('/', async (req: Request, res: Response) => {
-    console.log(req)
     const queryURL = req.query['url']
-    const limit = req.query['limit']
+    let limit: number
+    let garbage = req.query['url']
+    console.log(garbage)
+
+    if (req.query['limit']) {
+        limit = Number(req.query['limit'])
+    }
+    else {
+        // default limit
+        limit = 5
+    }
 
     if (!queryURL) {
         return res.status(404).json({ error: "No URL passed in" })
     }
+
+    if (Number.isNaN(limit)) {
+        return res.status(404).json({ error: "Limit should be number" })
+    }
+
     if (typeof queryURL !== "string") {
         return res.status(500).json({ error: "Invalid URL" })
     }
 
     try {
-        const results = await getSitemap(queryURL as string)
+        const results = await getSitemap(queryURL, limit)
 
         if (results.length === 0) {
             return res.send(`Invalid URL: ${queryURL}`);

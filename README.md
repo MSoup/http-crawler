@@ -4,6 +4,30 @@
 
 ![preview-usage](./usage/sample.gif)
 
+
+# Usage 
+
+### Standalone (results to console)
+```
+$ npm run crawl [website]
+```
+### Api server: 
+```
+$ npm run start
+```
+### Tests: 
+```
+$ npm run test
+```
+### Build dist:
+```
+$ npm run build
+```
+### Develop Locally:
+```
+$ npm run dev
+```
+
 # Features
 
 - given a base URL, collects all `anchor` elements on pages of content `text/html` 
@@ -37,29 +61,6 @@
 - Babel (transpilation)
 - Jest (unit tests)
 
-# Usage
-usage 
-
-### Standalone (results to console)
-```
-$ npm run crawl [website]
-```
-### Api server: 
-```
-$ npm run start
-```
-### Tests: 
-```
-$ npm run test
-```
-### Build dist:
-```
-$ npm run build
-```
-### Develop Locally:
-```
-$ npm run dev
-```
 # Implementation
 
 The core functionality of the app is built around 3 main functions:
